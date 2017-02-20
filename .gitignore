@@ -23,5 +23,5 @@ project/plugins/project/
 .ensime_cache/
 .scala_dependencies
 .worksheet
-
+.idea
 # ENSIME specific
