@@ -21,12 +21,8 @@ before_install:
   - sudo apt-get install -qq libssl1.0.0 python
   - curl -O https://packages.couchbase.com/releases/4.5.0/couchbase-server-community_4.5.0-ubuntu12.04_amd64.deb && sudo dpkg -i couchbase-server-community_4.5.0-ubuntu12.04_amd64.deb
 before_script:
-  - cat /etc/*release*
-  - uname -a
-  - sudo ps -ef
-  - sudo cat /etc/hosts
-  - /opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.1.1 --cluster-username=admin --cluster-password=123456 --cluster-ramsize=2048 --cluster-index-ramsize=2048
-  - curl -u admin:123456 -v -X POST http://127.0.1.1:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
+  - /opt/couchbase/bin/couchbase-cli cluster-init -c ${COUCHBASE_HOST} --cluster-username=admin --cluster-password=123456 --cluster-ramsize=2048 --cluster-index-ramsize=2048
+  - curl -u admin:123456 -v -X POST http://${COUCHBASE_HOST}:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test

@@ -7,13 +7,10 @@ import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.{Bucket, CouchbaseCluster}
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import Couchbase._
-import com.couchbase.client.java.query.{AsyncN1qlQueryRow, N1qlQuery}
-import com.couchbase.client.java.search.SearchQuery
-import rx.Observable
-import rx.functions.Func1
+import com.couchbase.client.java.query.N1qlQuery
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
 
 /**
   * Created by tiennt4 on 20/02/2017.
@@ -23,8 +20,9 @@ class CouchbaseClientTest extends FunSuite with BeforeAndAfter {
   var cluster: CouchbaseCluster = _
   var bucket: Bucket = _
   private implicit val ec = scala.concurrent.ExecutionContext.global
-  val bucketName = "userprofile"
-  val bucketPass = "1234"
+  private val couchbaseHost = Option(System.getenv("COUCHBASE_HOST")).getOrElse("localhost")
+  private val bucketName = Option(System.getenv("COUCHBASE_BUCKET")).getOrElse("default")
+  private val bucketPass = Option(System.getenv("COUCHBASE_BUCKET_PASS")).getOrElse("")
   private val testIdentity = UUID.randomUUID().toString
 
   private val doc1 =
@@ -44,8 +42,12 @@ class CouchbaseClientTest extends FunSuite with BeforeAndAfter {
        |}""".stripMargin
 
   before {
-    cluster = CouchbaseCluster.create("172.16.100.1")
-    bucket = cluster.openBucket(bucketName, bucketPass)
+    cluster = CouchbaseCluster.create(couchbaseHost)
+    if (bucketName.equals("default")) {
+      bucket = cluster.openBucket()
+    } else {
+      bucket = cluster.openBucket(bucketName, bucketPass)
+    }
     bucket.upsert(JsonDocument.create(s"$testIdentity-1", JsonObject.fromJson(doc1)))
     bucket.upsert(JsonDocument.create(s"$testIdentity-2", JsonObject.fromJson(doc2)))
     bucket.upsert(JsonDocument.create(s"$testIdentity-3", JsonObject.fromJson(doc3)))
