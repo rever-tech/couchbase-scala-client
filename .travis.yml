@@ -25,8 +25,8 @@ before_script:
   - uname -a
   - sudo ps -ef
   - sudo cat /etc/hosts
-  - /opt/couchbase/bin/couchbase-cli -c 127.0.1.1 cluster-init --cluster-username=admin --cluster-password=123456 --cluster-ramsize=2048 --cluster-index-ramsize=2048
-  - curl -u admin:123456 -v -X POST http://localhost:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
+  - /opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.1.1 --cluster-username=admin --cluster-password=123456 --cluster-ramsize=2048 --cluster-index-ramsize=2048
+  - curl -u admin:123456 -v -X POST http://127.0.1.1:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
