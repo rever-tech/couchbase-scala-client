@@ -1,5 +1,6 @@
 package rever.client4s
 
+import java.net.Inet4Address
 import java.util.UUID
 
 import com.couchbase.client.java.document.JsonDocument
@@ -20,7 +21,7 @@ class CouchbaseClientTest extends FunSuite with BeforeAndAfter {
   var cluster: CouchbaseCluster = _
   var bucket: Bucket = _
   private implicit val ec = scala.concurrent.ExecutionContext.global
-  private val couchbaseHost = Option(System.getenv("COUCHBASE_HOST")).getOrElse("localhost")
+  private val couchbaseHost = Option(System.getenv("COUCHBASE_HOST")).getOrElse(java.net.InetAddress.getLocalHost.getHostName)
   private val bucketName = Option(System.getenv("COUCHBASE_BUCKET")).getOrElse("default")
   private val bucketPass = Option(System.getenv("COUCHBASE_BUCKET_PASS")).getOrElse("")
   private val testIdentity = UUID.randomUUID().toString
