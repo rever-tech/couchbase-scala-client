@@ -23,7 +23,7 @@ before_install:
 before_script:
   - cat /etc/*release*
   - uname -a
-  - couchbase-cli cluster-init OPTIONS: --cluster-username=admin --cluster-password=1234 --cluster-port=SAME --cluster-ramsize=2048 --cluster-index-ramsize=2048 --services=data,index,query,moxi
+  - couchbase-cli cluster-init --cluster-username=admin --cluster-password=1234 --cluster-ramsize=2048 --cluster-index-ramsize=2048 --services=data,index,query,moxi
   - curl -u admin:1234 -v -X POST http://localhost:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
 
 script:
