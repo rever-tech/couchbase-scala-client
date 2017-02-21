@@ -25,6 +25,7 @@ before_script:
   - uname -a
   - sudo ps -ef
   - sudo cat /etc/hosts
+  - sleep 5s
   - /opt/couchbase/bin/couchbase-cli cluster-init -c ${COUCHBASE_HOST} --cluster-username=admin --cluster-password=123456 --cluster-ramsize=2048 --cluster-index-ramsize=2048 --services=data,index,query,fts
   - curl -u admin:123456 -v -X POST http://${COUCHBASE_HOST}:8091/pools/default/buckets -d 'flushEnabled=1&threadsNumber=3&replicaIndex=0&replicaNumber=0&evictionPolicy=valueOnly&ramQuotaMB=1024&bucketType=membase&name=default&authType=sasl&saslPassword='
   - /opt/couchbase/bin/cbq --script="CREATE PRIMARY INDEX ON `${COUCHBASE_BUCKET:-default}`"
